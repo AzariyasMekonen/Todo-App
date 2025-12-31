@@ -1,19 +1,18 @@
 import Task from '../models/task.model.js';
-import Task from '../models/task.model.js';
 
-exports.createTask = async (req, res) => {
+export const createTask = async (req, res) => {
     try {
         const{task} = req.body;
         
-        const Task = new Task({
+        const newTask = new Task({
             task
         })
 
-        await Task.save();
+        await newTask.save();
 
         res.status(201).json({
             message: "Task created successfully",
-            Task
+            newTask
         })
     }
     catch(err) {
@@ -21,20 +20,20 @@ exports.createTask = async (req, res) => {
     }
 }
 
-exports.getTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
     try {
-        const Tasks = Task.find();
-        res.json(Tasks)
+        const Tasks = await Task.find();
+        res.json({Tasks})
     }
     catch(err) {
         res.status(400).json({message: err.message})
     }
 }
 
-exports.getTask = async (req, res) => {
+export const getTask = async (req, res) => {
     try {
         const {id} = req.params;
-        const task = Task.findById(id);
+        const task = await Task.findById(id);
         if (!task) return res.status(404).json({message: "Task not found"})
         res.json(task)
     }
@@ -43,18 +42,18 @@ exports.getTask = async (req, res) => {
     }
 }
 
-exports.updateTask = async (req, res) => {
+export const updateTask = async (req, res) => {
     try {
         const {id} = req.params;
         const {task} = req.body;
 
-        const Task = await Task.findByIdAndUpdate(id, task, {new: true});
+        const updatedTask = await Task.findByIdAndUpdate(id, task, {new: true});
 
-        if (!task) return res.status(404).json({message: "task not found"});
+        if (!updatedTask) return res.status(404).json({message: "task not found"});
 
         res.status(200).json({
             message: "Task updated successfully",
-            Task
+            updatedTask
         });
     }
     catch(err) {
@@ -62,13 +61,13 @@ exports.updateTask = async (req, res) => {
     }
 }
 
-exports.deleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
     try {
         const {id} = req.params;
     
-        const Task = await Task.findByIdAndDelete(id);
+        const deletedTask = await Task.findByIdAndDelete(id);
 
-        if (!task)  return res.status(404).json({message: "Task not found"})
+        if (!deletedTask)  return res.status(404).json({message: "Task not found"})
         res.json('Task deleted successfully')
     }
     catch(err){

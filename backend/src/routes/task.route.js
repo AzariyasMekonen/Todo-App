@@ -1,4 +1,4 @@
-import {createTask, getTasks, getTask,updateTask, deleteTask} from '../controllers/task.controller'
+import { createTask, getTasks, getTask,updateTask, deleteTask} from '../controllers/task.controller.js'
 import express from 'express'
 
 const router = express.Router()
